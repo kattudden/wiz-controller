@@ -15,8 +15,10 @@ func TurnOn(ip string, port string, temperature int, dimming int) {
 	if err != nil {
 		panic("Unable to connect to light bulp!")
 	}
+	// Erstelle den JSON-String mit den übergebenen Parametern
+	jsonStr := fmt.Sprintf(`{"method": "setPilot", "params":{"state": true, "temp": %d, "dimming": %d}}`, temperature, dimming)
 
-	c.Write([]byte(`{"method": "setPilot", "params":{"state": true, "temp": 2700, "dimming": 100}}`))
+	c.Write([]byte(jsonStr))
 }
 
 func TurnOff(ip string, port string) {
