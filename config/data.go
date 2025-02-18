@@ -19,6 +19,7 @@ type GroupDef struct {
 
 // Bulp repräsentiert ein einzelnes Gerät.
 type Bulp struct {
+	Name string `yaml:"name"`
 	IP   string `yaml:"ip"`
 	Port string `yaml:"port"`
 }

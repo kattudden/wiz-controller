@@ -5,8 +5,11 @@ groups:
   wohnzimmer:
     bulps:
       - ip: "192.168.0.151"
+        name: "Wohnzimmer gross"
         port: "38899"
       - ip: "192.168.0.152"
+        name: "Wohnzimmer klein 1"
         port: "38899"
       - ip: "192.168.0.153"
+        name: "Wohnzimmer klein 2"
         port: "38899"

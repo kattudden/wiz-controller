@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Für Suchmaschinen optimierte Beschreibung -->
+    <meta name="description" content="WIZ-Controller">
+    <!-- Optional: Autor der Seite -->
+    <meta name="author" content="Kattudden">
+    <title>WIZ-Controller</title>
+
+    <!-- Verknüpfung zu externen CSS-Dateien -->
+    <link rel="stylesheet" href="/styles.css">
+    <!-- Optional: Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <header>
+        <h1>WIZ-Controller</h1>
+    </header>
+    <main>
+        <!-- Hauptinhalt der Seite -->
+        <section id="home">
+            {{/* Iteration über die Gruppen */}}
+            {{range .groups}}
+            <div class="group">
+                <!-- Raum-Bild für die Gruppe -->
+                <h2>
+                    <img src="/room.png" alt="Raum Symbol" style="width:24px;height:24px;vertical-align:middle;" />
+                    {{.Name}}
+                </h2>
+                <ul>
+                    {{/* Iteriere über die Bulbs innerhalb der aktuellen Gruppe */}}
+                    {{range .Bulbs}}
+                    <li>
+                        <!-- IP und Port anzeigen -->
+                        Name: {{.Name}}
+                        {{if .Message}}
+                        Fehler: {{.Message}}
+                        {{else}}
+                        <!-- Lichtstatus mit passendem Bild -->
+                        <img src="{{if .IsOn}}/light-on.png{{else}}/light-off.png{{end}}"
+                            alt="{{if .IsOn}}Licht an{{else}}Licht aus{{end}}"
+                            style="width:24px;height:24px;vertical-align:middle;" />
+                        Status: {{if .IsOn}}An{{else}}Aus{{end}}
+                        {{end}}
+                    </li>
+                    {{end}}
+                </ul>
+            </div>
+            {{else}}
+            <p>Keine Gruppen vorhanden!</p>
+            {{end}}
+        </section>
+
+    </main>
+
+    <footer>
+        <!-- Fußbereich -->
+        <p>&copy; 2025 Kattudden. Alle Rechte vorbehalten.</p>
+    </footer>
+
+</body>
+
+</html>
