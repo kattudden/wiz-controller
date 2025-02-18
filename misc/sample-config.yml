@@ -1,0 +1,12 @@
+defaults:
+  temperatur: 2700
+  dimming: 100
+groups:
+  wohnzimmer:
+    bulps:
+      - ip: "192.168.0.151"
+        port: "38899"
+      - ip: "192.168.0.152"
+        port: "38899"
+      - ip: "192.168.0.153"
+        port: "38899"
