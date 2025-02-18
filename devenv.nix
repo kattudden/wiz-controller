@@ -13,6 +13,7 @@
 
   # https://devenv.sh/languages/
   languages.go.enable = true;
+  languages.go.enableHardeningWorkaround = true;
 
   # https://devenv.sh/processes/
   # processes.cargo-watch.exec = "cargo-watch";

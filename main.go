@@ -27,6 +27,7 @@ func main() {
 		// Für jede Gruppe in den Konfigurationsdaten: Status der Bulbs abfragen.
 		for groupName, group := range config.Groups {
 			var bulbs []BulbStatus
+			allOn := true // Annahme: Alle Glühbirnen sind eingeschaltet
 
 			for _, bulp := range group.Bulps {
 				// Abfrage des Status, hier wird angenommen, dass controller.GetStatus(ip, port) einen Status zurückgibt
@@ -39,9 +40,13 @@ func main() {
 
 				if err != nil {
 					bulb.Message = fmt.Sprintf("Fehler: %v", err)
+					allOn = false // Fehler: Nicht alle Glühbirnen sind eingeschaltet
 				} else {
 					// Beispiel: Wir nutzen status.Result.State um zu bestimmen, ob das Licht an ist.
 					bulb.IsOn = status.Result.State
+					if !status.Result.State {
+						allOn = false // Mindestens eine Glühbirne ist ausgeschaltet
+					}
 				}
 
 				bulbs = append(bulbs, bulb)
@@ -50,6 +55,7 @@ func main() {
 			groupStatus := GroupStatus{
 				Name:  groupName,
 				Bulbs: bulbs,
+				AllOn: allOn, // Setze den Gesamtstatus der Gruppe
 			}
 			groups = append(groups, groupStatus)
 		}
@@ -58,6 +64,37 @@ func main() {
 			"groups": groups,
 		})
 	})
+
+	r.POST(
+		"/toggle-group",
+		func(c *gin.Context) {
+			var request struct {
+				GroupName string `json:"groupName"`
+				TurnOn    bool   `json:"turnOn"`
+			}
+
+			if err := c.BindJSON(&request); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+
+			group, exists := config.Groups[request.GroupName]
+			if !exists {
+				c.JSON(http.StatusNotFound, gin.H{"error": "Gruppe nicht gefunden"})
+				return
+			}
+
+			for _, bulb := range group.Bulps {
+				if request.TurnOn {
+					controller.TurnOn(bulb.IP, bulb.Port, config.Defaults.Temperatur, config.Defaults.Dimming)
+				} else {
+					controller.TurnOff(bulb.IP, bulb.Port)
+				}
+			}
+
+			c.JSON(http.StatusOK, gin.H{"message": "Gruppe erfolgreich geschaltet"})
+		},
+	)
 
 	// static files
 	r.StaticFile("/styles.css", "static/styles.css")

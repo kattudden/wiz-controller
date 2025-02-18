@@ -16,7 +16,7 @@ func TurnOn(ip string, port string, temperature int, dimming int) {
 		panic("Unable to connect to light bulp!")
 	}
 
-	c.Write([]byte(`{"method": "setPilot", "params":{"state": true, "temp": temperature, "dimming": dimming}}`))
+	c.Write([]byte(`{"method": "setPilot", "params":{"state": true, "temp": 2700, "dimming": 100}}`))
 }
 
 func TurnOff(ip string, port string) {

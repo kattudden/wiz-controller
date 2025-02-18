@@ -15,6 +15,39 @@
     <link rel="stylesheet" href="/styles.css">
     <!-- Optional: Favicon -->
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.group .switch input').forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    const groupName = this.closest('.group').querySelector('h2').textContent.trim();
+                    const turnOn = this.checked;
+
+                    fetch('/toggle-group', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            groupName: groupName,
+                            turnOn: turnOn
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                alert(data.error);
+                            } else {
+                                // Optional: Seite neu laden oder Status aktualisieren
+                                location.reload();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Fehler:', error);
+                        });
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -32,12 +65,19 @@
                     <img src="/room.png" alt="Raum Symbol" style="width:24px;height:24px;vertical-align:middle;" />
                     {{.Name}}
                 </h2>
+
+                <!-- Toggle-Button -->
+                <label class="switch">
+                    <input type="checkbox" {{if .AllOn}}checked{{end}}>
+                    <span class="slider"></span>
+                </label>
+
                 <ul>
                     {{/* Iteriere über die Bulbs innerhalb der aktuellen Gruppe */}}
                     {{range .Bulbs}}
                     <li>
                         <!-- IP und Port anzeigen -->
-                        Name: {{.Name}}
+                        {{.Name}}
                         {{if .Message}}
                         Fehler: {{.Message}}
                         {{else}}

@@ -13,4 +13,5 @@ type BulbStatus struct {
 type GroupStatus struct {
 	Name  string
 	Bulbs []BulbStatus
+	AllOn bool
 }
