@@ -22,7 +22,7 @@ func loadConfig(path string) (*Config, error) {
 }
 
 func GetConfig() (*Config, error) {
-	config, err := loadConfig("misc/sample-config.yml")
+	config, err := loadConfig("/config.yml")
 	if err != nil {
 		return nil, fmt.Errorf("unable to read config: %w", err)
 	}
