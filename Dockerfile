@@ -17,9 +17,8 @@ RUN adduser \
     --uid "${UID}" \    
     "${USER}"
 
-
 RUN go mod download
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /app/wiz-controller
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-w -s" -o /app/wiz-controller
 
 # Build Runtime Container.
 FROM scratch
